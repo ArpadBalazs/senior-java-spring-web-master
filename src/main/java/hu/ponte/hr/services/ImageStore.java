@@ -34,32 +34,37 @@ public class ImageStore {
     }
 
     public void saveImage(MultipartFile file, ImageRegisterCommand imageRegisterCommand) throws Exception {
-        Path path = new File(file.getName()).toPath();
+        Path path = new File(file.getOriginalFilename()).toPath();
         String mimeType = Files.probeContentType(path);
         imageRegisterCommand.setMimeType(mimeType);
-        imageRegisterCommand.setName(file.getName());
+
+        imageRegisterCommand.setName(file.getOriginalFilename());
+
         imageRegisterCommand.setSize(file.getSize());
+
         imageRegisterCommand.setPhoto(file.getBytes());
-        Signature signature = Signature.getInstance("SHA256withRSA");
+
+       /* Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(signService.getPrivateKey());
         signature.update(imageRegisterCommand.getPhoto());
         signature.initVerify(signService.getPublicKey());
         signature.update(imageRegisterCommand.getPhoto());
         String originalInput = signature.toString();
         String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
-        imageRegisterCommand.setDigitalSign(encodedString);
+        imageRegisterCommand.setDigitalSign(encodedString);*/
+
         Image image=new Image(imageRegisterCommand);
         imageRepository.save(image);
     }
-    public ImageMeta getImageWithGivenId(String id){
+    public Image getImageWithGivenId(String id){
         Image image=imageRepository.findById(Long.valueOf(id)).orElseThrow(EntityNotFoundException::new);
-        return ImageMeta.builder().id(image.getId().toString()).name(image.getName()).mimeType(image.getMimeType()).digitalSign(image.getDigitalSign()).photo(image.getPhoto()).build();
+        return image;
     }
 
     public List<ImageMeta> getAllImages(){
         List<ImageMeta> imageMetas=new ArrayList<>();
         for (Image image : imageRepository.findAll()) {
-            imageMetas.add(ImageMeta.builder().id(image.getId().toString()).name(image.getName()).mimeType(image.getMimeType()).digitalSign(image.getDigitalSign()).photo(image.getPhoto()).build());
+            imageMetas.add(ImageMeta.builder().id(image.getId().toString()).name(image.getName()).mimeType(image.getMimeType()).digitalSign(image.getDigitalSign()).build());
         }
         return imageMetas;
     }

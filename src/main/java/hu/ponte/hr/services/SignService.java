@@ -17,7 +17,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 @Service
 @Transactional
 public class SignService {
-    public PrivateKey getPrivateKey() throws Exception {
+/*    public PrivateKey getPrivateKey() throws Exception {
         byte[] keyBytes = Files.readAllBytes(Paths.get("key.private"));
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
@@ -28,5 +28,5 @@ public class SignService {
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
-    }
+    }*/
 }

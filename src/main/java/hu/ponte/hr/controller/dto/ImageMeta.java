@@ -15,6 +15,4 @@ public class ImageMeta
 	private String mimeType;
 	private long size;
 	private String digitalSign;
-	private byte[] photo;
-
 }

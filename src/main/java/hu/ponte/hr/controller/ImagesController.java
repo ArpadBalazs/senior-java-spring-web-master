@@ -2,6 +2,7 @@ package hu.ponte.hr.controller;
 
 
 import hu.ponte.hr.controller.dto.ImageMeta;
+import hu.ponte.hr.domain.Image;
 import hu.ponte.hr.services.ImageStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,11 @@ public class ImagesController {
     }
 
     @GetMapping("preview/{id}")
-    public ImageMeta getImage(@PathVariable("id") String id, HttpServletResponse response) {
-        ImageMeta imageMeta=imageStore.getImageWithGivenId(id);
+    public byte[] getImage(@PathVariable("id") String id, HttpServletResponse response) {
+        Image image=imageStore.getImageWithGivenId(id);
+        byte[] bytes=image.getPhoto();
         response.setStatus(HttpServletResponse.SC_OK);
-        return imageMeta;
+        response.setContentType(image.getMimeType());
+        return bytes;
     }
 }
