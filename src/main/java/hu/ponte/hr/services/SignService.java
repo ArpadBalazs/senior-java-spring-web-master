@@ -17,16 +17,16 @@ import java.security.spec.PKCS8EncodedKeySpec;
 @Service
 @Transactional
 public class SignService {
-/*    public PrivateKey getPrivateKey() throws Exception {
-        byte[] keyBytes = Files.readAllBytes(Paths.get("key.private"));
+   public PrivateKey getPrivateKey() throws Exception {
+        byte[] keyBytes = Files.readAllBytes(Paths.get("config/keys/key.private"));
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(spec);
     }
     public PublicKey getPublicKey() throws Exception {
-        byte[] keyBytes = Files.readAllBytes(Paths.get("key.pub"));
+        byte[] keyBytes = Files.readAllBytes(Paths.get("config/keys/key.pub"));
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePublic(spec);
-    }*/
+    }
 }

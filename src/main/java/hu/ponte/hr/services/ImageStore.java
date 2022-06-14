@@ -37,22 +37,10 @@ public class ImageStore {
         Path path = new File(file.getOriginalFilename()).toPath();
         String mimeType = Files.probeContentType(path);
         imageRegisterCommand.setMimeType(mimeType);
-
         imageRegisterCommand.setName(file.getOriginalFilename());
-
         imageRegisterCommand.setSize(file.getSize());
-
         imageRegisterCommand.setPhoto(file.getBytes());
-
-       /* Signature signature = Signature.getInstance("SHA256withRSA");
-        signature.initSign(signService.getPrivateKey());
-        signature.update(imageRegisterCommand.getPhoto());
-        signature.initVerify(signService.getPublicKey());
-        signature.update(imageRegisterCommand.getPhoto());
-        String originalInput = signature.toString();
-        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
-        imageRegisterCommand.setDigitalSign(encodedString);*/
-
+        signTheImage(imageRegisterCommand);
         Image image=new Image(imageRegisterCommand);
         imageRepository.save(image);
     }
@@ -67,5 +55,15 @@ public class ImageStore {
             imageMetas.add(ImageMeta.builder().id(image.getId().toString()).name(image.getName()).mimeType(image.getMimeType()).digitalSign(image.getDigitalSign()).build());
         }
         return imageMetas;
+    }
+   public void signTheImage(ImageRegisterCommand imageRegisterCommand) throws Exception {
+        Signature signature = Signature.getInstance("SHA256withRSA");
+        signature.initSign(signService.getPrivateKey());
+        signature.update(imageRegisterCommand.getPhoto());
+        signature.initVerify(signService.getPublicKey());
+        signature.update(imageRegisterCommand.getPhoto());
+        String originalInput = signature.toString();
+        String encodedString = Base64.getEncoder().encodeToString(originalInput.getBytes());
+        imageRegisterCommand.setDigitalSign(encodedString);
     }
 }
